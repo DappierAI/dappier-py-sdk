@@ -30,7 +30,7 @@ app = Dappier()
 
 # Make an API call
 response = app.real_time_search_api("Who won the US election in 2024?")
-print(response)
+print(response.message)
 ```
 
 Replace `<YOUR_API_KEY>` with your actual Dappier API key.
