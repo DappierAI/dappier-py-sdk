@@ -42,4 +42,4 @@ Replace `<YOUR_API_KEY>` with your actual Dappier API key.
 - **Real-time Search API:** Query real-world events and retrieve updated information.
 - **Simple and Intuitive Interface:** Focused on ease of use and efficient API calls.
 
-For detailed documentation and advanced features, refer to the official [Dappier documentation](#).
+For detailed documentation and advanced features, refer to the official [Dappier documentation](https://docs.dappier.com/quickstart).
