@@ -1,6 +1,6 @@
 # Dappier Python SDK
 
-The Dappier Python SDK provides an easy-to-use interface for interacting with the Dappier API, allowing you to make real-time API calls effortlessly.
+The Dappier Python SDK provides an easy-to-use interface for interacting with the Dappier API.
 
 ---
 
