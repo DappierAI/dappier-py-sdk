@@ -1,1 +1,1 @@
-from .dappier import Dappier
+from .dappier import DappierAsync, Dappier

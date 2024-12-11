@@ -1,3 +1,5 @@
-from .constants import BASE_URL, REAL_TIME_AI_MODEL, POLYGON_STOCK_MARKET_AI_MODEL
-from .ai_model_request import AIModelRequest
-from .ai_model_response import AIModelResponse
+from .constants import BASE_URL, REAL_TIME_AI_MODEL_ID, POLYGON_STOCK_MARKET_AI_MODEL_ID
+from .real_time_data_request import RealTimeDataRequest
+from .real_time_data_response import RealTimeDataResponse
+from .ai_recommendations_request import AIRecommendationsRequest
+from .ai_recommendations_response import AIRecommendationsResponse
