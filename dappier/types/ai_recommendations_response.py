@@ -10,10 +10,10 @@ class Result(BaseModel):
     score: Optional[float] = Field(None, description="Relevance score of the result (optional)")
     site: Optional[str] = Field(None, description="Name of the website hosting the article")
     site_domain: Optional[str] = Field(None, description="Domain name of the website")
-    source_url: Optional[str] = Field(None, description="URL to the original source")
-    summary: Optional[str] = Field(None, description="Summary of the article")
-    title: Optional[str] = Field(None, description="Title of the article")
-    url: Optional[str] = Field(None, description="URL of the article click tracking link")
+    source_url: str = Field(..., description="URL to the original source")
+    summary: str = Field(..., description="Summary of the article")
+    title: str = Field(..., description="Title of the article")
+    url: str = Field(..., description="URL of the article click tracking link")
 
 class Response(BaseModel):
     query: Optional[str] = Field(None, description="Query used to search for recommendations")
