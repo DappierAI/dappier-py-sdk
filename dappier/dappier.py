@@ -1,15 +1,18 @@
 import os
 from contextlib import AbstractContextManager, AbstractAsyncContextManager
 from typing import Optional
-import logging
+
 import asyncio
-from .types import (
+import logging
+
+from dappier.types import (
     RealTimeDataRequest,
     RealTimeDataResponse,
     AIRecommendationsRequest,
-    AIRecommendationsResponse
+    AIRecommendationsResponse,
+    SearchAlgorithm
 )
-from .api import DappierClient, DappierAsyncClient
+from dappier.api import DappierClient, DappierAsyncClient
 
 class Dappier(AbstractContextManager):
     def __init__(self, api_key: Optional[str] = None) -> None:
@@ -32,7 +35,7 @@ class Dappier(AbstractContextManager):
             print(f"An error occurred while searching real-time data: {e}")
             return None
 
-    def get_ai_recommendations(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: str = 'most_recent') -> AIRecommendationsResponse | None:
+    def get_ai_recommendations(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> AIRecommendationsResponse | None:
         try:
             request = AIRecommendationsRequest(
                 datamodel_id=data_model_id,
@@ -87,7 +90,7 @@ class DappierAsync(AbstractAsyncContextManager):
         except Exception as e:
             print(f"An error occurred while searching real-time data: {e}")
 
-    async def get_ai_recommendations_async(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: str = 'most_recent') -> AIRecommendationsResponse | None:
+    async def get_ai_recommendations_async(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> AIRecommendationsResponse | None:
         try:
             request = AIRecommendationsRequest(
                 datamodel_id=data_model_id,
