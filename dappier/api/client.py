@@ -1,8 +1,9 @@
+from contextlib import AbstractContextManager
 import httpx
 import logging
 from dappier.types import BASE_URL
 
-class DappierClient:
+class DappierClient(AbstractContextManager):
     def __init__(self, api_key: str) -> None:
         """
         Initialize the API client.

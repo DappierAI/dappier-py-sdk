@@ -1,9 +1,11 @@
+from contextlib import AbstractAsyncContextManager
 import httpx
 import logging
 import asyncio
 from dappier.types import BASE_URL
 
-class DappierAsyncClient:
+
+class DappierAsyncClient(AbstractAsyncContextManager):
   def __init__(self, api_key) -> None:
     """
     Initialize the API clinet.
@@ -40,11 +42,11 @@ class DappierAsyncClient:
 
   def __del__(self):
     """
-    Ensure the client is closed, If it is not closed explicitly.
+    Log a warning if the instance is not closed explicitly.
     """
     if self.client and not self.client.is_closed:
-      logging.warning(
-        "DappierAsyncClient instance was not closed properly."
-        "Use `async with` or explicitly call `close()` to manage resources."
-      )
-      asyncio.create_task(self.client.aclose())
+      try:
+          asyncio.run(self.close())
+      except Exception as e:
+          "DappierAsyncClient instance was not closed explicitly. Resources may not be cleaned up."
+          logging.error(f"Error while closing DappierAsyncClient: {e}")
