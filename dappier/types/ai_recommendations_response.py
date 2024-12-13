@@ -7,13 +7,13 @@ class Result(BaseModel):
     preview_content: Optional[str] = Field(None, description="Preview of the article content")
     pubdate: Optional[str] = Field(None, description="Publication date of the article")
     pubdate_unix: Optional[int] = Field(None, description="Publication date in Unix timestamp")
-    score: float = Field(..., description="Relevance score of the result (optional)")
+    score: Optional[float] = Field(None, description="Relevance score of the result (optional)")
     site: Optional[str] = Field(None, description="Name of the website hosting the article")
     site_domain: Optional[str] = Field(None, description="Domain name of the website")
     source_url: str = Field(..., description="URL to the original source")
     summary: str = Field(..., description="Summary of the article")
     title: str = Field(..., description="Title of the article")
-    url: str = Field(..., description="URL of the article click tracking link")
+    url: Optional[str] = Field(None, description="URL of the article click tracking link")
 
 class Response(BaseModel):
     query: Optional[str] = Field(None, description="Query used to search for recommendations")
