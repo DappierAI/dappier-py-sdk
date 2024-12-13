@@ -65,7 +65,8 @@ class Dappier(AbstractContextManager):
         self._client.close()
 
     def __del__(self):
-        self._client.close()
+        if hasattr(self, '_client') and self._client:
+            self._client.close()
 
     def __repr__(self) -> str:
         return f"Dappier(api_key={self.api_key[:4]}...)"  # Mask part of the key for privacy
@@ -123,7 +124,7 @@ class DappierAsync(AbstractAsyncContextManager):
         """
         Log a warning if the instance is not closed explicitly.
         """
-        if self._async_client.client and not self._async_client.client.is_closed:
+        if hasattr(self, '_async_client') and self._async_client.client and not self._async_client.client.is_closed:
             try:
                 asyncio.run(self._async_client.close())
             except Exception as e:
