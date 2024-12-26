@@ -164,16 +164,6 @@ files = [
 ]
 
 [[package]]
-name = "logging"
-version = "0.4.9.6"
-description = "A logging module for Python"
-optional = false
-python-versions = "*"
-files = [
-    {file = "logging-0.4.9.6.tar.gz", hash = "sha256:26f6b50773f085042d301085bd1bf5d9f3735704db9f37c1ce6d8b85c38f2417"},
-]
-
-[[package]]
 name = "packaging"
 version = "24.2"
 description = "Core utilities for Python packages"
@@ -436,4 +426,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "7ed459c5c87238ecfda463e736d8dfda5b01dfffb633e9d1863dfcc9bb8e7111"
+content-hash = "a4d6644d0f6d40139628e02fdcefcaeed72c56178004cc943dcc2b911eab8891"
