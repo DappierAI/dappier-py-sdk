@@ -25,7 +25,7 @@ class Dappier(AbstractContextManager):
         self.api_key = api_key
         self._client = DappierClient(api_key=api_key)
     
-    def search_real_time_data(self, query: str, ai_model_id: str) -> RealTimeDataResponse | None:
+    def search_real_time_data(self, query: str, ai_model_id: str) -> Optional[RealTimeDataResponse]:
         try:
             request = RealTimeDataRequest(query=query).model_dump()
             response = self._client.client.post(url=f"app/aimodel/{ai_model_id}", json=request)
@@ -35,7 +35,7 @@ class Dappier(AbstractContextManager):
             print(f"An error occurred while searching real-time data: {e}")
             return None
 
-    def get_ai_recommendations(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> AIRecommendationsResponse | None:
+    def get_ai_recommendations(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> Optional[AIRecommendationsResponse]:
         try:
             request = AIRecommendationsRequest(
                 datamodel_id=data_model_id,
@@ -82,7 +82,7 @@ class DappierAsync(AbstractAsyncContextManager):
         self.api_key = api_key
         self._async_client = DappierAsyncClient(api_key=api_key)
     
-    async def search_real_time_data_async(self, query: str, ai_model_id: str) -> RealTimeDataResponse | None:
+    async def search_real_time_data_async(self, query: str, ai_model_id: str) -> Optional[RealTimeDataResponse]:
         try:
             request = RealTimeDataRequest(query=query).model_dump()
             response = await self._async_client.client.post(url=f"app/aimodel/{ai_model_id}", json=request)
@@ -91,7 +91,7 @@ class DappierAsync(AbstractAsyncContextManager):
         except Exception as e:
             print(f"An error occurred while searching real-time data: {e}")
 
-    async def get_ai_recommendations_async(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> AIRecommendationsResponse | None:
+    async def get_ai_recommendations_async(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> Optional[AIRecommendationsResponse]:
         try:
             request = AIRecommendationsRequest(
                 datamodel_id=data_model_id,
