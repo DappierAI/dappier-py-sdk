@@ -2,7 +2,6 @@ import os
 from contextlib import AbstractContextManager, AbstractAsyncContextManager
 from typing import Optional
 
-import asyncio
 import logging
 
 from dappier.types import (
@@ -12,6 +11,7 @@ from dappier.types import (
     AIRecommendationsResponse,
     SearchAlgorithm
 )
+from dappier.utils import ai_recommendations_to_string
 from dappier.api import DappierClient, DappierAsyncClient
 
 class Dappier(AbstractContextManager):
@@ -34,6 +34,14 @@ class Dappier(AbstractContextManager):
         except Exception as e:
             print(f"An error occurred while searching real-time data: {e}")
             return None
+    
+    def search_real_time_data_string(self, query: str, ai_model_id: str) -> Optional[RealTimeDataResponse]:
+        try:
+            response = self.search_real_time_data(query=query, ai_model_id=ai_model_id)
+            return response.message
+        except Exception as e:
+            print(f"An error occurred while searching real-time data: {e}")
+            return None
 
     def get_ai_recommendations(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> Optional[AIRecommendationsResponse]:
         try:
@@ -48,6 +56,25 @@ class Dappier(AbstractContextManager):
             response = self._client.client.post(url=f"app/v2/search?data_model_id={data_model_id}", json=request)
             response.raise_for_status()
             return AIRecommendationsResponse(**response.json())
+        except Exception as e:
+            print(f"An error occurred while fetching AI recommendations: {e}")
+            return None
+        
+    def get_ai_recommendations_string(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> Optional[AIRecommendationsResponse]:
+        try:
+            response = self.get_ai_recommendations(
+                query=query,
+                data_model_id=data_model_id,
+                similarity_top_k=similarity_top_k,
+                ref=ref,
+                num_articles_ref=num_articles_ref,
+                search_algorithm=search_algorithm
+            )
+            
+            if (response is None):
+                return "No response returned"
+            else:
+                return ai_recommendations_to_string(response)
         except Exception as e:
             print(f"An error occurred while fetching AI recommendations: {e}")
             return None
@@ -91,6 +118,14 @@ class DappierAsync(AbstractAsyncContextManager):
         except Exception as e:
             print(f"An error occurred while searching real-time data: {e}")
 
+    async def search_real_time_data_string(self, query: str, ai_model_id: str) -> Optional[RealTimeDataResponse]:
+        try:
+            response = await self.search_real_time_data_async(query=query, ai_model_id=ai_model_id)
+            return response.message
+        except Exception as e:
+            print(f"An error occurred while searching real-time data: {e}")
+            return None
+
     async def get_ai_recommendations_async(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> Optional[AIRecommendationsResponse]:
         try:
             request = AIRecommendationsRequest(
@@ -107,6 +142,25 @@ class DappierAsync(AbstractAsyncContextManager):
     
         except Exception as e:
             print(f"An error occurred while fetching AI recommendations: {e}")
+
+    async def get_ai_recommendations_string_async(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> Optional[AIRecommendationsResponse]:
+        try:
+            response = await self.get_ai_recommendations_async(
+                query=query,
+                data_model_id=data_model_id,
+                similarity_top_k=similarity_top_k,
+                ref=ref,
+                num_articles_ref=num_articles_ref,
+                search_algorithm=search_algorithm
+            )
+            
+            if (response is None):
+                return "No response returned"
+            else:
+                return ai_recommendations_to_string(response)
+        except Exception as e:
+            print(f"An error occurred while fetching AI recommendations: {e}")
+            return None
     
     async def __aenter__(self):
         """
@@ -121,15 +175,11 @@ class DappierAsync(AbstractAsyncContextManager):
         await self._async_client.close()
 
     def __del__(self):
-        """
-        Log a warning if the instance is not closed explicitly.
-        """
-        if hasattr(self, '_async_client') and self._async_client.client and not self._async_client.client.is_closed:
-            try:
-                asyncio.run(self._async_client.close())
-            except Exception as e:
-                logging.error("DappierAsync instance was not closed explicitly. Resources may not be cleaned up.")
-                logging.error(f"Error while closing DappierAsyncClient: {e}")
+        if hasattr(self, '_async_client') and not self._async_client.client.is_closed:
+            logging.warning(
+                "DappierAsync was garbage-collected without being closed. "
+                "Please use `async with` or call `await app_async.close()`."
+            )
 
     def __repr__(self) -> str:
         return f"DappierAsync(api_key={self.api_key[:4]}...)"  # Mask part of the key for privacy
