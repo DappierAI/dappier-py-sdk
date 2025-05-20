@@ -35,13 +35,13 @@ class Dappier(AbstractContextManager):
             print(f"An error occurred while searching real-time data: {e}")
             return None
     
-    def search_real_time_data_string(self, query: str, ai_model_id: str) -> Optional[RealTimeDataResponse]:
+    def search_real_time_data_string(self, query: str, ai_model_id: str) -> str:
         try:
             response = self.search_real_time_data(query=query, ai_model_id=ai_model_id)
             return response.message
         except Exception as e:
             print(f"An error occurred while searching real-time data: {e}")
-            return None
+            return "An error occurred while searching real-time data"
 
     def get_ai_recommendations(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> Optional[AIRecommendationsResponse]:
         try:
@@ -60,7 +60,7 @@ class Dappier(AbstractContextManager):
             print(f"An error occurred while fetching AI recommendations: {e}")
             return None
         
-    def get_ai_recommendations_string(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> Optional[AIRecommendationsResponse]:
+    def get_ai_recommendations_string(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> str:
         try:
             response = self.get_ai_recommendations(
                 query=query,
@@ -77,7 +77,7 @@ class Dappier(AbstractContextManager):
                 return ai_recommendations_to_string(response)
         except Exception as e:
             print(f"An error occurred while fetching AI recommendations: {e}")
-            return None
+            return "An error occurred while fetching AI recommendations"
  
     def __enter__(self):
         """
@@ -117,14 +117,15 @@ class DappierAsync(AbstractAsyncContextManager):
             return RealTimeDataResponse(**response.json())
         except Exception as e:
             print(f"An error occurred while searching real-time data: {e}")
+            return None
 
-    async def search_real_time_data_string(self, query: str, ai_model_id: str) -> Optional[RealTimeDataResponse]:
+    async def search_real_time_data_string(self, query: str, ai_model_id: str) -> str:
         try:
             response = await self.search_real_time_data_async(query=query, ai_model_id=ai_model_id)
             return response.message
         except Exception as e:
             print(f"An error occurred while searching real-time data: {e}")
-            return None
+            return "An error occurred while searching real-time data"
 
     async def get_ai_recommendations_async(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> Optional[AIRecommendationsResponse]:
         try:
@@ -142,8 +143,9 @@ class DappierAsync(AbstractAsyncContextManager):
     
         except Exception as e:
             print(f"An error occurred while fetching AI recommendations: {e}")
+            return None
 
-    async def get_ai_recommendations_string_async(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> Optional[AIRecommendationsResponse]:
+    async def get_ai_recommendations_string_async(self, query: str, data_model_id: str, similarity_top_k: int = 9, ref: Optional[str] = None, num_articles_ref: int = 0, search_algorithm: SearchAlgorithm = "most_recent") -> str:
         try:
             response = await self.get_ai_recommendations_async(
                 query=query,
@@ -160,7 +162,7 @@ class DappierAsync(AbstractAsyncContextManager):
                 return ai_recommendations_to_string(response)
         except Exception as e:
             print(f"An error occurred while fetching AI recommendations: {e}")
-            return None
+            return "An error occurred while fetching AI recommendations"
     
     async def __aenter__(self):
         """
